@@ -15,16 +15,22 @@ def call_api(league_id, login, firstid=0):
     xs = []
 
     while True:
+        # Decks ids by leagues ID
         a = f"get/mtgo/league_decklist?instance_id=^{league_id}&loginplayeventcourseid=>{i}&c:limit={step}"
+        # wins/losses
         a += "&c:join=type:league_match_wins^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:0^inject_at:score^hide:loginplayeventcourseid"
+        # Associate matches
         a += ",type:loginplayeventcoursematch^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:1^inject_at:matches^hide:loginplayeventcourseid"
+        # deck list with docid
         a += ",type:league_decklist_cards^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:1^inject_at:deck^hide:loginplayeventcourseid'leaguedeckid"
+        # map docid to card name
         a += "(type:card_attributes^on:docid^to:digitalobjectcatalogid^list:0^inject_at:name" \
              "^terms:attribute_description=RARITY_STATUS" \
              "^hide:digitalobjectcatalogid'attribute_description'attribute_value)"
+        # remove necessary data
         a += '&c:hide=loginid'
         url = census + login + a
         r = requests.get(url)

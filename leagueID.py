@@ -1,7 +1,7 @@
 import os
 
 
-def get_leagues_id(path, format_='vintage', start='2022-11-18', end='2100-01-01'):
+def get_leagues_id(path, format_, start='2000-01-01', end='2100-01-01'):
     """
     Get leagues ID and data from
 

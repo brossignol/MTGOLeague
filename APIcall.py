@@ -42,7 +42,7 @@ def call_api(league_id, login, firstid=0):
     return xs
 
 
-def call_and_save(league_ids, login, out_path='./leagues_data/vintage'):
+def call_and_save(league_ids, login, out_path):
     """
     Recursively call API for all leagues ID and save decks into json file, one per ID.
 

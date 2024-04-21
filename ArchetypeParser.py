@@ -79,7 +79,12 @@ def eval_fallback(cards, main, side):
 
 
 class Parser:
-    def __init__(self, encoding='utf-8', format_='Vintage', path=r'C:\Projects\mtgo\MTGOFormatData\Formats'):
+    def __init__(self, format_: str, path: str, encoding='utf-8'):
+        """
+        :param path: name of the format ex: 'Vintage'
+        :param format_: path to MTGOFormatData\Formats
+        :param encoding:
+        """
         self.archs = []
         path_ = os.path.join(os.path.join(path, format_), 'Archetypes')
         for file in os.listdir(path_):

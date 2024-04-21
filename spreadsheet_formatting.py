@@ -14,17 +14,17 @@ approx = {0: (0, 0),
           4: (1, 3)}
 
 
-def create_sheets_inputs(in_path='./leagues_data/vintage',
-                         out_file=f'./leagues_data/vintage/vintage_combined.csv',
-                         parser_format='Vintage',
-                         parser_path=r'C:\Projects\mtgo\MTGOFormatData\Formats',
+def create_sheets_inputs(in_path,
+                         out_file,
+                         parser_format,
+                         parser_path,
                          anonymized=True):
     """
-    List all json files in folder
+    List all json files and create output csv
     :param in_path: input folder
-    :param out_file: input folder
-    :param parser_path:
-    :param parser_format:
+    :param out_file: output file, must be .csv
+    :param parser_path: name of the format ex: 'Vintage'
+    :param parser_format: path to MTGOFormatData\Formats
     :param anonymized:
     :return:
     """
@@ -34,7 +34,7 @@ def create_sheets_inputs(in_path='./leagues_data/vintage',
         if '.json' in file:
             files.append(os.path.join(file))
 
-    parser = Parser('utf-8', format_=parser_format, path=parser_path)
+    parser = Parser(format_=parser_format, path=parser_path)
 
     df = {}
 

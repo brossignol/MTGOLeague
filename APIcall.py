@@ -20,17 +20,17 @@ def call_api(league_id, login, firstid=0):
         # wins/losses
         a += "&c:join=type:league_match_wins^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:0^inject_at:score^hide:loginplayeventcourseid"
-        # Associate matches
+        # associated matches
         a += ",type:loginplayeventcoursematch^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:1^inject_at:matches^hide:loginplayeventcourseid"
-        # deck list with docid
+        # decklist with cards docid
         a += ",type:league_decklist_cards^on:loginplayeventcourseid^to:loginplayeventcourseid" \
              "^list:1^inject_at:deck^hide:loginplayeventcourseid'leaguedeckid"
-        # map docid to card name
+        # map docid to card names
         a += "(type:card_attributes^on:docid^to:digitalobjectcatalogid^list:0^inject_at:name" \
              "^terms:attribute_description=RARITY_STATUS" \
              "^hide:digitalobjectcatalogid'attribute_description'attribute_value)"
-        # remove necessary data
+        # remove unnecessary data
         a += '&c:hide=loginid'
         url = census + f's:{login}/' + a
         r = requests.get(url)

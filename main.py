@@ -4,12 +4,15 @@ from leagueID import get_leagues_id
 from spreadsheet_formatting import create_sheets_inputs
 
 
-def main(login):
-    login = f's:{login}/'
+def main():
     path = 'C:/Projects/mtgo/MTGODecklistCache/Tournaments/mtgo.com'
-    league_ids = get_leagues_id(path, format_='vintage', start='2022-11-18', end='2100-01-01')
+    data_path = r'C:\Projects\mtgo\MTGO classifier\leagues_data\vintage'
 
-    data_path = './leagues_data/vintage'
+    league_ids = get_leagues_id(path, format_='vintage', start='2022-11-18', end='2100-01-01')
+    # league_ids = ['8115']
+
+    with open('login.txt') as file:
+        login = file.read()
 
     call_and_save(league_ids, login, out_path=data_path)
 
@@ -20,4 +23,4 @@ def main(login):
 
 
 if __name__ == '__main__':
-    main('mtgoapilogin')
+    main()

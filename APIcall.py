@@ -32,7 +32,7 @@ def call_api(league_id, login, firstid=0):
              "^hide:digitalobjectcatalogid'attribute_description'attribute_value)"
         # remove necessary data
         a += '&c:hide=loginid'
-        url = census + login + a
+        url = census + f's:{login}/' + a
         r = requests.get(url)
 
         x = eval(r.content)
@@ -59,7 +59,7 @@ def call_and_save(league_ids, login, out_path):
     """
     os.makedirs(out_path, exist_ok=True)
     for league_id in league_ids:
-        print('league', league_id)
+        print('retrieving league', league_id)
 
         xs = call_api(league_id, login)
 
@@ -68,5 +68,5 @@ def call_and_save(league_ids, login, out_path):
 
         print('writing')
         today = datetime.today().isoformat().replace(':', '-')
-        with open(os.path.join(out_path, f'/{league_id}_on_{today}.json', 'w')) as file:
+        with open(os.path.join(out_path, f'{league_id}_on_{today}.json'), 'w') as file:
             json.dump(decks_, file)

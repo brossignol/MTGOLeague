@@ -38,6 +38,7 @@ def create_sheets_inputs(in_path,
 
     df = {}
 
+    print('creating sheets:')
     for file in files:
         print(file)
         with open(os.path.join(in_path, file)) as f:

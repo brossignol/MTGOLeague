@@ -6,40 +6,6 @@ import json
 import os
 
 
-arch_mapping = {'Sphere Shops': 'Shops',
-                'Jewel Shops': 'Shops',
-                'Other Shops': 'Shops',
-                'Dredge': 'Bazaar',
-                'AggroVine': 'Bazaar',
-                'CounterVine': 'Bazaar',
-                'Jeskai': 'Blue Control',
-                'Lurrus Saga': 'Blue Control',
-                'Other Blue Control': 'Blue Control',
-                'Doomsday': 'Combo',
-                'Breach': 'Combo',
-                'Oops All Spells': 'Combo',
-                'Turbo Vault Key': 'Combo',
-                'Beseech Storm': 'Combo',
-                'Other Combo': 'Combo',
-                'BUG': 'DRS',
-                '4c DRS Walkers': 'DRS',
-                'Lurrus DRS': 'DRS',
-                'Other DRS': 'DRS',
-                'Initiative': 'Aggro',
-                'Lurrus Aggro': 'Aggro',
-                'Other Aggro': 'Aggro',
-                'Other Blue Tempo': 'Aggro',
-                'Oath': 'Oath',
-                'PO': 'Blue Tinker',
-                'Grixis Saga': 'Blue Tinker',
-                'Esper Saga': 'Blue Tinker',
-                'Initiative Tinker': 'Blue Tinker',
-                'Blue Ring': 'Blue Tinker',
-                'Other Tinker': 'Blue Tinker',
-                'Other': 'Other'}
-arch_mapping = {k.casefold(): v for k, v in arch_mapping.items()}
-
-
 def eval_condition(cond, main, side):
     type_ = cond.get('Type', cond.get('type'))
     cards = set(cond['Cards'])

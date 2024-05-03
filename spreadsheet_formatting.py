@@ -14,11 +14,7 @@ approx = {0: (0, 0),
           4: (1, 3)}
 
 
-def create_sheets_inputs(in_path,
-                         out_file,
-                         parser_format,
-                         parser_path,
-                         anonymized=True):
+def create_sheets_inputs(in_path, out_path, parser_format, parser_path, anonymized=True, force=False):
     """
     List all json files and create output csv
     :param in_path: input folder
@@ -36,11 +32,15 @@ def create_sheets_inputs(in_path,
 
     parser = Parser(format_=parser_format, path=parser_path)
 
-    df = {}
-
     print('creating sheets:')
-    for file in files:
+    for i, file in enumerate(sorted(files)):
+        out_file = os.path.join(out_path, os.path.splitext(file)[0] + '.csv')
+
+        if not force and os.path.exists(out_file) and i < len(files) - 1:
+            continue
+
         print(file)
+        df = {}
         with open(os.path.join(in_path, file)) as f:
             decks = json.load(f)
 
@@ -75,6 +75,6 @@ def create_sheets_inputs(in_path,
             df.setdefault('Date', []).append(deck['instance_id'][-10:].replace('-', '/'))
             df.setdefault('League ID', []).append(f'{deck["instance_id"][:4]}')
 
-    df = pd.DataFrame(df)
+        df = pd.DataFrame(df)
 
-    df.to_csv(out_file, index=False)
+        df.to_csv(out_file, index=False)

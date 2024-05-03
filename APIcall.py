@@ -48,7 +48,7 @@ def call_api(league_id, login, firstid=0):
     return xs
 
 
-def call_and_save(league_ids, login, out_path):
+def call_and_save(league_ids, login, out_path, force_update=False):
     """
     Recursively call API for all leagues ID and save decks into json file, one per ID.
 
@@ -58,15 +58,24 @@ def call_and_save(league_ids, login, out_path):
     :return:
     """
     os.makedirs(out_path, exist_ok=True)
-    for league_id in league_ids:
+    for i, league_id in enumerate(sorted(league_ids)):
+        out_file = os.path.join(out_path, f'{league_id}.json')
+        if os.path.exists(out_file):
+            if not force_update and i < len(league_ids) - 1:  # if already exist and not last leagues
+                continue
+            with open(out_file) as file:
+                decks = json.load(file)
+                start_id = max([deck['loginplayeventcourseid'] for deck in decks])
+        else:
+            decks = []
+            start_id = 0
+
         print('retrieving league', league_id)
+        xs = call_api(league_id, login, start_id)
 
-        xs = call_api(league_id, login)
+        if len(xs) > 0:
+            decks.extend(format_deck(deck) for x in xs for deck in x['league_decklist_list'])
 
-        decks = [deck for x in xs for deck in x['league_decklist_list']]
-        decks_ = [format_deck(deck) for deck in decks]
-
-        print('writing')
-        today = datetime.today().isoformat().replace(':', '-')
-        with open(os.path.join(out_path, f'{league_id}_on_{today}.json'), 'w') as file:
-            json.dump(decks_, file)
+            print('writing')
+            with open(out_file, 'w') as file:
+                json.dump(decks, file, indent=2)

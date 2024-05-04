@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import requests
 
@@ -57,10 +58,10 @@ def call_and_save(league_ids, login, out_path, force_update=False):
     :return:
     """
     os.makedirs(out_path, exist_ok=True)
-    for i, league_id in enumerate(sorted(league_ids)):
+    for i, league_id in enumerate(sorted(league_ids, reverse=True)):
         out_file = os.path.join(out_path, f'{league_id}.json')
         if os.path.exists(out_file):
-            if not force_update and i < len(league_ids) - 1:  # if already exist and not last leagues
+            if not force_update and i != 0:  # if already exist and not last leagues
                 continue
             with open(out_file) as file:
                 decks = json.load(file)
@@ -69,12 +70,21 @@ def call_and_save(league_ids, login, out_path, force_update=False):
             decks = []
             start_id = 0
 
-        print('retrieving league', league_id)
+        print('retrieving league', league_id, i + 1, '/', len(league_ids))
+        s = time.time()
         xs = call_api(league_id, login, start_id)
+        print('done in', time.time() - s, 's')
 
         if len(xs) > 0:
-            decks.extend(format_deck(deck) for x in xs for deck in x['league_decklist_list'])
+            try:
+                decks.extend(format_deck(deck) for x in xs for deck in x['league_decklist_list'])
 
-            print('writing')
-            with open(out_file, 'w') as file:
-                json.dump(decks, file, indent=2)
+                print('writing')
+                with open(out_file, 'w') as file:
+                    json.dump(decks, file, indent=0)
+            except Exception as e:
+                print('failed writing raw')
+                with open(out_file + '-failed.json', 'w') as file:
+                    json.dump([deck for x in xs for deck in x['league_decklist_list']], file, indent=2)
+
+                raise e

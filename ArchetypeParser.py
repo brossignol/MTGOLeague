@@ -89,3 +89,11 @@ class Parser:
                 return max_[0]
             else:
                 return 'Other'
+
+
+class ParserEDH:
+    def __init__(self):
+        pass
+
+    def __call__(self, deck):
+        return ' + '.join(sorted(c['CardName'] for c in deck['Sideboard']))

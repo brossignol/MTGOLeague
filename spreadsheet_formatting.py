@@ -6,11 +6,16 @@ import pandas as pd
 from ArchetypeParser import Parser
 from formatdeck import reformat_deck
 
-approx = {0: (0, 0),
-          1: (0, 1),
-          2: (0, 2),
-          3: (0, 3),
-          4: (1, 3)}
+approx_drop = {0: (0, 0),
+               1: (0, 1),
+               2: (0, 2),
+               3: (0, 3),
+               4: (1, 3)}
+
+approx_cedh = {0: (0, 0),
+               1: (0, 1),
+               2: (0, 2),
+               3: (1, 2)}
 
 
 def get_archetype_mapping(file):
@@ -23,16 +28,16 @@ def get_archetype_mapping(file):
     return {k.casefold(): v for _, k, v in df.itertuples()}
 
 
-def create_sheets_inputs(in_path, out_path, parser_format, parser_path, mapping_file, anonymized=True, force=False):
+def create_sheets_inputs(in_path, out_path, parser, arch_mapping, approx, anonymized=True, force=False):
     """
     List all json files and create output csv
     :param in_path: input folder
     :param out_path: output path for .csv files
-    :param parser_format: name of the format ex: 'Vintage'
-    :param parser_path: path to MTGOFormatData/Formats
     :param anonymized: remove player names
     :param force: overwrite existing .csv
-    :param mapping_file: file with subarchetype/archetype mapping
+    :param approx:
+    :param parser:
+    :param arch_mapping:
     :return:
     """
 
@@ -40,10 +45,6 @@ def create_sheets_inputs(in_path, out_path, parser_format, parser_path, mapping_
     for file in os.listdir(in_path):
         if '.json' in file:
             files.append(os.path.join(file))
-
-    parser = Parser(format_=parser_format, path=parser_path)
-
-    arch_mapping = get_archetype_mapping(mapping_file)
 
     print('creating sheets:')
     for i, file in enumerate(sorted(files)):

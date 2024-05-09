@@ -4,35 +4,62 @@ MTGOArchetypeParser/Data/ArchetypeAnalyzer.cs
 
 import json
 import os
+from enum import Enum
+
+
+class Cond(Enum):
+    InMainboard = 'InMainboard'.casefold()
+    InSideboard = 'InSideboard'.casefold()
+    InMainOrSideboard = 'InMainOrSideboard'.casefold()
+    OneOrMoreInMainboard = 'OneOrMoreInMainboard'.casefold()
+    OneOrMoreInSideboard = 'OneOrMoreInSideboard'.casefold()
+    OneOrMoreInMainOrSideboard = 'OneOrMoreInMainOrSideboard'.casefold()
+    TwoOrMoreInMainboard = 'TwoOrMoreInMainboard'.casefold()
+    TwoOrMoreInSideboard = 'TwoOrMoreInSideboard'.casefold()
+    TwoOrMoreInMainOrSideboard = 'TwoOrMoreInMainOrSideboard'.casefold()
+    DoesNotContain = 'DoesNotContain'.casefold()
+    DoesNotContainMainboard = 'DoesNotContainMainboard'.casefold()
+    DoesNotContainSideboard = 'DoesNotContainSideboard'.casefold()
 
 
 def eval_condition(cond, main, side):
     type_ = cond.get('Type', cond.get('type')).casefold()
     cards = set(cond['Cards'])
 
-    if type_ == 'InMainboard'.casefold():
+    if type_ == Cond.InMainboard.value:
         return cards.issubset(main)
-    if type_ == 'InSideboard'.casefold():
+
+    if type_ == Cond.InSideboard.value:
         return cards.issubset(side)
-    if type_ == 'InMainOrSideboard'.casefold():
+
+    if type_ == Cond.InMainOrSideboard.value:
         return cards.issubset(main.union(side))
-    if type_ == 'OneOrMoreInMainboard'.casefold():
+
+    if type_ == Cond.OneOrMoreInMainboard.value:
         return len(cards.intersection(main)) >= 1
-    if type_ == 'OneOrMoreInSideboard'.casefold():
+
+    if type_ == Cond.OneOrMoreInSideboard.value:
         return len(cards.intersection(side)) >= 1
-    if type_ == 'OneOrMoreInMainOrSideboard'.casefold():
+
+    if type_ == Cond.OneOrMoreInMainOrSideboard.value:
         return len(cards.intersection(main.union(side))) >= 1
-    if type_ == 'TwoOrMoreInMainboard'.casefold():
+
+    if type_ == Cond.TwoOrMoreInMainboard.value:
         return len(cards.intersection(main)) >= 2
-    if type_ == 'TwoOrMoreInSideboard'.casefold():
+
+    if type_ == Cond.TwoOrMoreInSideboard.value:
         return len(cards.intersection(side)) >= 2
-    if type_ == 'TwoOrMoreInMainOrSideboard'.casefold():
+
+    if type_ == Cond.TwoOrMoreInMainOrSideboard.value:
         return len(cards.intersection(main.union(side))) >= 2
-    if type_ == 'DoesNotContain'.casefold():
+
+    if type_ == Cond.DoesNotContain.value:
         return cards.isdisjoint(main) and cards.isdisjoint(side)
-    if type_ == 'DoesNotContainMainboard'.casefold():
+
+    if type_ == Cond.DoesNotContainMainboard.value:
         return cards.isdisjoint(main)
-    if type_ == 'DoesNotContainSideboard'.casefold():
+
+    if type_ == Cond.DoesNotContainSideboard.value:
         return cards.isdisjoint(side)
 
     raise UserWarning(f'Unknown condition {type_}')

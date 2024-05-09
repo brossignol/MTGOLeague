@@ -7,33 +7,35 @@ import os
 
 
 def eval_condition(cond, main, side):
-    type_ = cond.get('Type', cond.get('type'))
+    type_ = cond.get('Type', cond.get('type')).casefold()
     cards = set(cond['Cards'])
 
-    if type_ == 'InMainboard':
+    if type_ == 'InMainboard'.casefold():
         return cards.issubset(main)
-    if type_ == 'InSideboard':
+    if type_ == 'InSideboard'.casefold():
         return cards.issubset(side)
-    if type_ == 'InMainOrSideboard':
+    if type_ == 'InMainOrSideboard'.casefold():
         return cards.issubset(main.union(side))
-    if type_ == 'OneOrMoreInMainboard':
+    if type_ == 'OneOrMoreInMainboard'.casefold():
         return len(cards.intersection(main)) >= 1
-    if type_ == 'OneOrMoreInSideboard':
+    if type_ == 'OneOrMoreInSideboard'.casefold():
         return len(cards.intersection(side)) >= 1
-    if type_ == 'OneOrMoreInMainOrSideboard':
+    if type_ == 'OneOrMoreInMainOrSideboard'.casefold():
         return len(cards.intersection(main.union(side))) >= 1
-    if type_ == 'TwoOrMoreInMainboard':
+    if type_ == 'TwoOrMoreInMainboard'.casefold():
         return len(cards.intersection(main)) >= 2
-    if type_ == 'TwoOrMoreInSideboard':
+    if type_ == 'TwoOrMoreInSideboard'.casefold():
         return len(cards.intersection(side)) >= 2
-    if type_ == 'TwoOrMoreInMainOrSideboard':
+    if type_ == 'TwoOrMoreInMainOrSideboard'.casefold():
         return len(cards.intersection(main.union(side))) >= 2
-    if type_ == 'DoesNotContain':
+    if type_ == 'DoesNotContain'.casefold():
         return cards.isdisjoint(main) and cards.isdisjoint(side)
-    if type_ == 'DoesNotContainMainboard':
+    if type_ == 'DoesNotContainMainboard'.casefold():
         return cards.isdisjoint(main)
-    if type_ == 'DoesNotContainSideboard':
+    if type_ == 'DoesNotContainSideboard'.casefold():
         return cards.isdisjoint(side)
+
+    raise UserWarning(f'Unknown condition {type_}')
 
 
 def eval_fallback(cards, main, side):

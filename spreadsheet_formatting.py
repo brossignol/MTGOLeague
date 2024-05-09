@@ -28,9 +28,10 @@ def get_archetype_mapping(file):
     return {k.casefold(): v for _, k, v in df.itertuples()}
 
 
-def create_sheets_inputs(in_path, out_path, parser, arch_mapping, approx, anonymized=True, force=False):
+def create_sheets_inputs(league_ids, in_path, out_path, parser, arch_mapping, approx, anonymized=True, force=False):
     """
     List all json files and create output csv
+    :param league_ids:
     :param in_path: input folder
     :param out_path: output path for .csv files
     :param anonymized: remove player names
@@ -41,16 +42,12 @@ def create_sheets_inputs(in_path, out_path, parser, arch_mapping, approx, anonym
     :return:
     """
 
-    files = []
-    for file in os.listdir(in_path):
-        if '.json' in file:
-            files.append(os.path.join(file))
-
     print('creating sheets:')
-    for i, file in enumerate(sorted(files)):
+    for i, league_id in enumerate(sorted(league_ids, reverse=True)):
+        file = f'{league_id}.json'
         out_file = os.path.join(out_path, os.path.splitext(file)[0] + '.csv')
 
-        if not force and os.path.exists(out_file) and i < len(files) - 1:
+        if not force and os.path.exists(out_file) and i > 0:  # always update the most recent
             continue
 
         print(file)
@@ -62,7 +59,12 @@ def create_sheets_inputs(in_path, out_path, parser, arch_mapping, approx, anonym
 
         for deck in decks_:
             subarch = parser(deck)
-            arch = arch_mapping[subarch.casefold()]
+
+            if subarch.casefold() not in arch_mapping:
+                arch = 'other'
+                print('missing archetype mapping for', subarch)
+            else:
+                arch = arch_mapping[subarch.casefold()]
 
             m = min(5, deck['Matches'])
 

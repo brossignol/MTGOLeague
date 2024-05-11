@@ -94,3 +94,16 @@ def create_sheets_inputs(league_ids, in_path, out_path, parser, arch_mapping, ap
         df = pd.DataFrame(df)
 
         df.to_csv(out_file, index=False)
+
+
+def combine_json(league_ids, data_path):
+    dfs = []
+    for i, league_id in enumerate(sorted(league_ids, reverse=True)):
+        file = f'{league_id}.json'
+        out_file = os.path.join(data_path, os.path.splitext(file)[0] + '.csv')
+
+        dfs.append(pd.read_csv(out_file))
+
+    df = pd.concat(dfs)
+    df.to_csv(os.path.join(data_path, 'combined.csv'))
+

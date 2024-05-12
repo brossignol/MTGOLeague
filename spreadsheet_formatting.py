@@ -60,7 +60,9 @@ def create_sheets_inputs(league_ids, in_path, out_path, parser, arch_mapping, ap
         for deck in decks_:
             subarch = parser(deck)
 
-            if subarch.casefold() not in arch_mapping:
+            if isinstance(arch_mapping, str):
+                arch = arch_mapping
+            elif subarch.casefold() not in arch_mapping:
                 arch = 'other'
                 print('missing archetype mapping for', subarch)
             else:

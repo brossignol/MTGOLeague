@@ -15,7 +15,6 @@ def main():
     data_path = fr'.\leagues_data\{format_}'
 
     league_ids = get_leagues_id(path, format_=format_, start='2020-04-16', end='2100-01-01')
-    # league_ids = [8059]  # cedh
     print(league_ids)
 
     with open('login.txt') as file:
@@ -27,15 +26,31 @@ def main():
     arch_mapping = get_archetype_mapping('mapping.csv')
     approx = approx_drop
 
-    # parser = ParserEDH()
-    # arch_mapping = defaultdict(lambda: 'edh')
-    # approx = approx_cedh
-
     create_sheets_inputs(league_ids, in_path=data_path, out_path=data_path, parser=parser, arch_mapping=arch_mapping,
                          approx=approx, force=False)
 
     # combine_json(league_ids, data_path)
 
 
+def main_cedh():
+    format_ = 'cedh'
+    data_path = fr'.\leagues_data\{format_}'
+
+    league_ids = [8059]
+
+    with open('login.txt') as file:
+        login = file.read()
+
+    call_and_save(league_ids, login, out_path=data_path)
+
+    parser = ParserEDH()
+    arch_mapping = 'edh'
+    approx = approx_cedh
+
+    create_sheets_inputs(league_ids, in_path=data_path, out_path=data_path, parser=parser, arch_mapping=arch_mapping,
+                         approx=approx, force=False)
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    main_cedh()

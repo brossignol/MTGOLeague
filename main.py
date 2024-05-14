@@ -14,7 +14,7 @@ def main():
     format_ = 'vintage'
     data_path = fr'.\leagues_data\{format_}'
 
-    league_ids = get_leagues_id(path, format_=format_, start='2020-04-16', end='2100-01-01')
+    league_ids = get_leagues_id(path, format_=format_, start='2024-04-17', end='2100-01-01')
     print(league_ids)
 
     with open('login.txt') as file:
@@ -52,5 +52,5 @@ def main_cedh():
 
 
 if __name__ == '__main__':
-    # main()
-    main_cedh()
+    main()
+    # main_cedh()

@@ -107,5 +107,5 @@ def combine_json(league_ids, data_path):
         dfs.append(pd.read_csv(out_file))
 
     df = pd.concat(dfs)
-    df.to_csv(os.path.join(data_path, 'combined.csv'))
+    df.to_csv(os.path.join(data_path, 'combined.csv'), index=False)
 

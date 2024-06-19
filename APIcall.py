@@ -35,7 +35,7 @@ def call_api(league_id, login, firstid=0):
         url = census + f's:{login}/' + a
         r = requests.get(url)
 
-        x = eval(r.content)
+        x = json.JSONDecoder().decode(r.content.decode('utf8'))
         xs.append(x)
 
         print(i, x['returned'])

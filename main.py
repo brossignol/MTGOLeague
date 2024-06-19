@@ -14,20 +14,20 @@ def main():
     format_ = 'vintage'
     data_path = fr'.\leagues_data\{format_}'
 
-    league_ids = get_leagues_id(path, format_=format_, start='2024-04-17', end='2100-01-01')
+    league_ids = get_leagues_id(path, format_=format_, start='2024-06-12', end='2100-01-01')
     print(league_ids)
 
     with open('login.txt') as file:
         login = file.read()
 
-    call_and_save(league_ids, login, out_path=data_path)
+    call_and_save(league_ids, login, out_path=data_path, force_update=True)
 
     parser = Parser(format_=format_.capitalize(), path=r'C:\Projects\mtgo\MTGOFormatData\Formats')
     arch_mapping = get_archetype_mapping('mapping.csv')
     approx = approx_drop
 
     create_sheets_inputs(league_ids, in_path=data_path, out_path=data_path, parser=parser, arch_mapping=arch_mapping,
-                         approx=approx, force=False)
+                         approx=approx, force=True)
 
     # combine_json(league_ids, data_path)
 
@@ -36,7 +36,7 @@ def main_cedh():
     format_ = 'cedh'
     data_path = fr'.\leagues_data\{format_}'
 
-    league_ids = [8059]
+    league_ids = [8059, 8283]
 
     with open('login.txt') as file:
         login = file.read()
@@ -48,7 +48,9 @@ def main_cedh():
     approx = approx_cedh
 
     create_sheets_inputs(league_ids, in_path=data_path, out_path=data_path, parser=parser, arch_mapping=arch_mapping,
-                         approx=approx, force=False)
+                         approx=approx, force=True)
+
+    combine_json(league_ids, data_path)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def main():
 
     call_and_save(league_ids, login, out_path=data_path, force_update=True)
 
-    parser = Parser(format_=format_.capitalize(), path=r'C:\Projects\mtgo\MTGOFormatData\Formats')
+    parser = Parser(format_=format_.capitalize(), path='C:\Projects\mtgo\MTGOFormatData\Formats')
     arch_mapping = get_archetype_mapping('mapping.csv')
     approx = approx_drop
 

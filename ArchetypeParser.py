@@ -33,7 +33,7 @@ def eval_condition(cond, main, side):
         return cards.issubset(side)
 
     if type_ == Cond.InMainOrSideboard.value:
-        return cards.issubset(main.union(side))
+        return cards.issubset(set(main).union(side))
 
     if type_ == Cond.OneOrMoreInMainboard.value:
         return len(cards.intersection(main)) >= 1
@@ -42,7 +42,7 @@ def eval_condition(cond, main, side):
         return len(cards.intersection(side)) >= 1
 
     if type_ == Cond.OneOrMoreInMainOrSideboard.value:
-        return len(cards.intersection(main.union(side))) >= 1
+        return len(cards.intersection(set(main).union(side))) >= 1
 
     if type_ == Cond.TwoOrMoreInMainboard.value:
         return len(cards.intersection(main)) >= 2
@@ -51,7 +51,7 @@ def eval_condition(cond, main, side):
         return len(cards.intersection(side)) >= 2
 
     if type_ == Cond.TwoOrMoreInMainOrSideboard.value:
-        return len(cards.intersection(main.union(side))) >= 2
+        return len(cards.intersection(set(main).union(side))) >= 2
 
     if type_ == Cond.DoesNotContain.value:
         return cards.isdisjoint(main) and cards.isdisjoint(side)
